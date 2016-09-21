@@ -10,9 +10,24 @@ until curl http://${MONGODB1}:28017/serverStatus\?text\=1 2>&1 | grep uptime | h
   sleep 1
 done
 
-echo curl http://${MONGODB1}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
-echo "Started.."
+until curl http://${MONGODB2}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1; do
+  printf '.'
+  sleep 1
+done
 
+until curl http://${MONGODB3}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1; do
+  printf '.'
+  sleep 1
+done
+
+echo curl http://${MONGODB1}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
+echo "Mongo1 Started.."
+
+echo curl http://${MONGODB2}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
+echo "Mongo2 Started.."
+
+echo curl http://${MONGODB3}:28017/serverStatus\?text\=1 2>&1 | grep uptime | head -1
+echo "Mongo3 Started.."
 
 echo SETUP.sh time now: `date +"%T" `
 mongo --host ${MONGODB1}:27017 <<EOF
